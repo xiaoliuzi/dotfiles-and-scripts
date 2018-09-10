@@ -34,10 +34,19 @@ nnoremap <leader><CR> i<CR><ESC>k$
 " /* automatically install Plug */
 if empty(glob('~/.vim/autoload/plug.vim')) && !has('win32')
   silent !mkdir -p ~/.vim/autoload &&
-        \ wget https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        \ wget https://raw.githubusercontent.com/junegunn/vim-plug/0.9.1/plug.vim
         \ -O ~/.vim/autoload/plug.vim
+  if [! -e ~/.vim/autoload/plug.vim ]; then
+    wget -c https://raw.githubusercontent.com/junegunn/vim-plug/0.9.1/plug.vim -O ~/.vim/autoload/plug.vim
+  endif
+  md5sum -c plugin.vim.md5
+  if [$? != 0]; then
+   rm ~/.vim/autoload/plug.vim
+   wget -c https://raw.githubusercontent.com/junegunn/vim-plug/0.9.1/plug.vim -O ~/.vim/autoload/plug.vim
+  endif
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
+
 
 call plug#begin()
 Plug 'junegunn/vim-plug'
